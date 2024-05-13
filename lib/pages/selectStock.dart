@@ -1,9 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-//import 'package:ureca_app/pages/candlechart.dart';
+import 'package:ureca_app/pages/buy.dart';
+import 'package:ureca_app/pages/candlechart.dart';
 //import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:convert';
+
+import 'package:ureca_app/pages/sell.dart';
 
 
 class SelectStock extends StatefulWidget {
@@ -42,7 +45,8 @@ class _SelectStockstate extends State<SelectStock> {
 
   Future<Map<String, dynamic>> fetchStockInfo(String symbol) async {
     String apiUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/$symbol?metrics=high&interval=1d&range=1d';
-
+  
+  try {
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
@@ -51,8 +55,13 @@ class _SelectStockstate extends State<SelectStock> {
     } else {
       throw Exception('Failed to load stock info');
     }
+    
+  } catch (e) {
+    print('Failed to load chart data: $e');
+    return{};
   }
-
+  }
+  
 
   @override 
   Widget build(BuildContext context) {
@@ -171,13 +180,65 @@ class _SelectStockstate extends State<SelectStock> {
           ]
     ),
     const SizedBox(height: 20, width: 10),
-    Container(
-      height: myHeight * 0.4,
-      width: myWidth,
-      color: Colors.amber,
-      //stockData parameter is passed to the CandleChart widget using the constructor  
-      //child: CandleChart(stockData: widget.stockData,)
+    Row(
+      children: [
+        Container(
+          height: myHeight * 0.4,
+          width: myWidth,
+          //color: Colors.amber,
+          //stockData parameter is passed to the CandleChart widget using the constructor  
+          child: CandleChart(symbol: widget.stockData['symbol'])
+        ),
+      ],
     ),
+    const SizedBox(height: 40, width: 10),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(
+            onPressed:() {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => const Buy(),
+                  ),
+                  );
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                const Color.fromARGB(255, 24, 28, 98)
+              ),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.symmetric(horizontal: 40), 
+              ),
+            ),
+            child: const Text("Buy"),
+          ),
+             SizedBox(width: 30),
+            
+          ElevatedButton(
+            onPressed:() {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => const Sell(),
+                  ),
+                  );
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                const Color.fromARGB(255, 24, 28, 98)
+              ),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.symmetric(horizontal: 40), 
+              ),
+            ),
+            child: const Text("Sell"),
+            ),
+        ],
+      ),
+    
                       ],
                     );
                   

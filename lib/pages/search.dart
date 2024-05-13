@@ -18,7 +18,7 @@ class _SearchState extends State<Search> {
   {"id": "3", "stock": "Amazon.com Inc.", "symbol": "AMZN"},
   {"id": "4", "stock": "Microsoft Corporation", "symbol": "MSFT"},
   {"id": "5", "stock": "Netflix Inc.", "symbol": "NFLX"},
-  {"id": "6", "stock": "Facebook Inc.", "symbol": "FB"},
+  {"id": "6", "stock": "Meta Platforms, Inc", "symbol": "META"},
   {"id": "7", "stock": "Tesla Inc.", "symbol": "TSLA"},
   {"id": "8", "stock": "Johnson & Johnson", "symbol": "JNJ"},
   {"id": "9", "stock": "Procter & Gamble Co.", "symbol": "PG"},
@@ -62,12 +62,7 @@ class _SearchState extends State<Search> {
                   builder: (context) => SelectStock(stockData: stocks[index]),
                 ),
               );//stock details pushed to selectstock to retrieve open,close,high,low for the day
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CandleChart(stockData: stocks[index]),
-                ),
-              );//stock details pushed to candle chart to retrieve year round values for candle chart 
+              //ignore -- stock details pushed to candle chart to retrieve year round values for candle chart 
             },
           );
         },

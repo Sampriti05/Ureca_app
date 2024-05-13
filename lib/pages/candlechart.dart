@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,9 +7,10 @@ import 'dart:convert';
 
 
 class CandleChart extends StatefulWidget {
-  final Map<String, dynamic> stockData;
-
-  CandleChart({required this.stockData});
+  //final Map<String, dynamic> stockData;
+  final String symbol;
+  CandleChart({required this.symbol});
+  //CandleChart({required this.stockData});
 
   @override
   State<CandleChart> createState() => _CandleChartState();
@@ -17,11 +19,14 @@ class CandleChart extends StatefulWidget {
 
 class _CandleChartState extends State<CandleChart> {
  List<ChartSampleData> chartData = [];
+ late TrackballBehavior _trackballBehavior;
 
    @override
    void initState() {
+  _trackballBehavior = TrackballBehavior(
+    enable: true, activationMode: ActivationMode.singleTap);
     super.initState();
-    fetchChartData();
+    fetchChartData(widget.symbol); // previously used widget.stockData['symbol']
 }
 
 @override
@@ -31,6 +36,7 @@ class _CandleChartState extends State<CandleChart> {
         body: chartData.isEmpty
         ? Center(child: CircularProgressIndicator())
         : SfCartesianChart(
+          trackballBehavior: _trackballBehavior,
           series: <CandleSeries<ChartSampleData, DateTime>>[
             CandleSeries<ChartSampleData, DateTime>(
               dataSource: chartData,
@@ -41,14 +47,23 @@ class _CandleChartState extends State<CandleChart> {
               closeValueMapper: (ChartSampleData data, _) => data.close,
             ),
           ],
+          primaryXAxis: DateTimeAxis(
+            dateFormat: DateFormat.MMM(),
+            majorGridLines: MajorGridLines(width: 0)
+          ),
+          primaryYAxis: NumericAxis(
+            minimum: 70,
+            interval: 5,
+           ),
+             
         ),
       ),
     );
   }
 
-    Future<void> fetchChartData() async {
-    const String url =
-        'https://query1.finance.yahoo.com/v8/finance/chart/aapl?metrics=high&interval=1d&range=1y';
+    Future<void> fetchChartData(String symbol) async {
+    final String url =
+        'https://query1.finance.yahoo.com/v8/finance/chart/$symbol?metrics=high&interval=1d&range=1y';
 
     final response = await http.get(Uri.parse(url));
 
@@ -78,7 +93,7 @@ class _CandleChartState extends State<CandleChart> {
       });
     } else {
       throw Exception('Failed to load chart data');
-    }
+    } 
   }
 }
 

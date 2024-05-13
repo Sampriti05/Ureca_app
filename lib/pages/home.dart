@@ -45,7 +45,7 @@ class Home extends StatelessWidget {
             Expanded(
               child: Container(
                 width: double.infinity,
-                height: 500,
+                height: 700,
                 padding: const EdgeInsets.symmetric(horizontal:25, vertical: 25),
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -100,41 +100,96 @@ class StockList extends StatelessWidget {
   }
 //TODO fix issue 
 //latest code but sizing is off used column renderflex error overflow 
-  @override
+
+@override
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      Container(
+        height: MediaQuery.of(context).size.height / 3.5, // Adjust the height as needed
+        child: ListView.builder(
+          itemCount: stockSymbols.length,
+          itemBuilder: (context, index) {
+            final symbol = stockSymbols[index];
+            return FutureBuilder(
+              future: fetchStockData(symbol),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final stockData = snapshot.data as Map<String, dynamic>;
+                  final regularMarketPrice = double.parse(stockData['chart']['result'][0]['meta']
+                      ['regularMarketPrice'].toString());
+
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage('assets/$symbol.png'),
+                      radius: 20,
+                    ),
+                    title: Text(symbol),
+                    subtitle: Text(
+                      'Regular Market Price: ${regularMarketPrice.toStringAsFixed(2)}',
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  );
+                }
+              },
+            );
+          },
+        ),
+      ),
+    ],
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+  /* @override
   Widget build(BuildContext context) {
     
     return SingleChildScrollView(
       child: Column(
         children: stockSymbols.map((symbol) {
           return FutureBuilder(
-            future: fetchStockData(symbol),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                final stockData = snapshot.data as Map<String, dynamic>;
-                final regularMarketPrice = double.parse(stockData['chart']['result'][0]['meta']
-                    ['regularMarketPrice'].toString());
+          future: fetchStockData(symbol),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final stockData = snapshot.data as Map<String, dynamic>;
+              final regularMarketPrice = double.parse(stockData['chart']['result'][0]['meta']
+                  ['regularMarketPrice'].toString());
 
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: AssetImage('assets/$symbol.png'),
-                    radius: 20,
-                  ),
-                  title: Text(symbol),
-                  subtitle: Text(
-                    'Regular Market Price: ${regularMarketPrice.toStringAsFixed(2)}',
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                );
-              } 
-            },
-          );
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage('assets/$symbol.png'),
+                  radius: 20,
+                ),
+                title: Text(symbol),
+                subtitle: Text(
+                  'Regular Market Price: ${regularMarketPrice.toStringAsFixed(2)}',
+                  style: const TextStyle(color: Colors.black),
+                ),
+              );
+            } 
+          },
+        );
+      }).toList(),
+    ),
+  );
+}
         }
-      ).toList(),
-      ),
-    );
-  }
-  }
+    */
+}
