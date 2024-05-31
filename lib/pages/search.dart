@@ -28,7 +28,7 @@ class _SearchState extends State<Search> {
   {"id": "13", "stock": "The Goldman Sachs Group Inc.", "symbol": "GS"},
   {"id": "14", "stock": "Exxon Mobil Corporation", "symbol": "XOM"},
   {"id": "15", "stock": "Chevron Corporation", "symbol": "CVX"},
-  {"id": "16", "stock": "Coca-Cola Company", "symbol": "KO"},
+  //{"id": "16", "stock": "Coca-Cola Company", "symbol": "KO"},
   // Add more stocks if needed
 ];
 
