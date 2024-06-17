@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ureca_app/pages/home.dart';
 import 'package:ureca_app/pages/appbar.dart';
 
 class Intro extends StatelessWidget {
