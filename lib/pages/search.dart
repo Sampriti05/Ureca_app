@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ureca_app/pages/candlechart.dart';
 import 'package:ureca_app/pages/selectStock.dart';
 
 class Search extends StatefulWidget {

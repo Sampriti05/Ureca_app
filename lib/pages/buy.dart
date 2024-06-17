@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:ureca_app/pages/wallet.dart';
 
@@ -50,6 +52,48 @@ class _BuyState extends State<Buy> {
     '9',
     '10',
   ];
+
+  //user wants to pay
+  /*
+  void userTappedPay() {
+    if (formKey.currentState!.validate()) {
+      //only show dialog if form is valid 
+      showDialog(
+         context: context,
+         builder: (context) => AlertDialog(
+          title: const Text("Confirm payment"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+              Text("Card Number: $cardNumber"),
+              Text("Expiry Date: $expiryDate"),
+              Text("Card Holder name : $cardHolderName"),
+              Text("CVV: $cvvCode"),
+              ]
+            ),
+            ),
+            actions: [
+              // cancel action 
+              TextButton(
+                onPressed:() => Navigator.pop(context),
+                child: const Text("Cancel"),
+              ),
+
+              //yes button 
+              TextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Wallet(),
+                    )
+                ), 
+                child: const Text("Yes"),)
+            ]
+         )
+      );
+    }
+  }
+  */
 
   @override
   Widget build(BuildContext context) {
